@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Média, Moda e Mediana</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Média, Moda e Mediana</h1>
+        <div class="input-section">
+            <label for="numbers">Digite os números separados por vírgula:</label>
+            <input type="text" id="numbers" placeholder="Ex: 1,2,3,4,5">
+        </div>
+        <button onclick="calcular()">Calcular</button>
+        <div class="result-section">
+            <p><strong>Média:</strong> <span id="media"></span></p>
+            <p><strong>Moda:</strong> <span id="moda"></span></p>
+            <p><strong>Mediana:</strong> <span id="mediana"></span></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Desenvolvido por Cauã Quintino</p> <br>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdvJk5-491TNy_h7I0PC9W7kjYUc6Oue7jrZ4O7BnPShW4Ybw/viewform">Link do formulário com as perguntas do projeto.</a>
+    </footer>
+
+    <script>
+        function calcular() {
+            let input = document.getElementById("numbers").value;
+            let numbers = input.split(",").map(Number).filter(n => !isNaN(n));
+
+            if (numbers.length === 0) {
+                alert("Por favor, insira números válidos!");
+                return;
+            }
+
+            // Média
+            let media = numbers.reduce((acc, num) => acc + num, 0) / numbers.length;
+
+            // Mediana
+            numbers.sort((a, b) => a - b);
+            let mediana;
+            if (numbers.length % 2 === 0) {
+                mediana = (numbers[numbers.length / 2 - 1] + numbers[numbers.length / 2]) / 2;
+            } else {
+                mediana = numbers[Math.floor(numbers.length / 2)];
+            }
+
+            // Moda
+            let freqMap = {};
+            let maxFreq = 0;
+            let moda = [];
+            numbers.forEach(num => {
+                freqMap[num] = (freqMap[num] || 0) + 1;
+                if (freqMap[num] > maxFreq) {
+                    maxFreq = freqMap[num];
+                }
+            });
+            for (let key in freqMap) {
+                if (freqMap[key] === maxFreq) {
+                    moda.push(Number(key));
+                }
+            }
+
+            document.getElementById("media").innerText = media.toFixed(2);
+            document.getElementById("mediana").innerText = mediana;
+            document.getElementById("moda").innerText = moda.length === numbers.length ? "Nenhuma" : moda.join(", ");
+        }
+    </script>
+</body>
+</html>
